@@ -7,7 +7,7 @@ from app.core.jwt import create_access_token, create_refresh_token, verify_refre
 from app.core.exceptions import BadRequestException, UnauthorizedException, ConflictException
 from app.core.response import success_response
 from app.models.models import User
-from app.schemas.schemas import UserCreate, UserResponse, LoginRequest, TokenResponse, RefreshTokenRequest
+from app.schemas.schemas import UserCreate, UserResponse, LoginRequest, TokenResponse, LoginResponse, RefreshTokenRequest
 
 router = APIRouter()
 
@@ -43,7 +43,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login(login_data: LoginRequest, db: Session = Depends(get_db)):
-    """Login user and return access and refresh tokens"""
+    """Login user and return access and refresh tokens with user data"""
     
     # Find user by email
     user = db.query(User).filter(User.email == login_data.email).first()
@@ -55,14 +55,23 @@ def login(login_data: LoginRequest, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": str(user.id)})
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
     
-    token_response = TokenResponse(
+    # Prepare user data
+    user_data = {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "created_at": user.created_at.isoformat() if user.created_at else None
+    }
+    
+    login_response = LoginResponse(
         access_token=access_token,
-        refresh_token=refresh_token
+        refresh_token=refresh_token,
+        user=user_data
     )
     
     return success_response(
         message="Inicio de sesión exitoso",
-        data=token_response.model_dump()
+        data=login_response.model_dump()
     )
 
 

@@ -645,7 +645,13 @@ Content-Type: application/json
   "data": {
     "access_token": "eyJhbGciOiJIUzI1NiIs...",
     "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
-    "token_type": "bearer"
+    "token_type": "bearer",
+    "user": {
+      "id": 1,
+      "name": "Juan Pérez",
+      "email": "juan@example.com",
+      "created_at": "2025-10-05T10:00:00"
+    }
   }
 }
 ```
