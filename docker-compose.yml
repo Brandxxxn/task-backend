@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # Aplicación FastAPI
+  api:
+    build: .
+    container_name: task-api
+    ports:
+      - "8000:8000"
+    environment:
+      # Estas variables se sobrescriben con las del archivo .env
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM:-HS256}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      - API_V1_STR=${API_V1_STR:-/api/v1}
+      - PROJECT_NAME=${PROJECT_NAME:-Task Management API}
+    env_file:
+      - .env
+    volumes:
+      # Montar código para desarrollo (hot reload)
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - task-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/docs || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Base de datos PostgreSQL local (opcional - usa esto SI NO usas Neon)
+  # Comenta esta sección si usas Neon en la nube
+  db:
+    image: postgres:15-alpine
+    container_name: task-postgres
+    environment:
+      POSTGRES_USER: taskuser
+      POSTGRES_PASSWORD: taskpass
+      POSTGRES_DB: taskdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - task-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskuser -d taskdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Descomentar para ver logs de PostgreSQL
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
+
+  # PgAdmin - Interfaz web para gestionar PostgreSQL
+  # Accede en http://localhost:5050
+  # Solo para desarrollo - eliminar en producción
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: task-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@task.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - task-network
+    restart: unless-stopped
+    profiles:
+      - tools  # Solo se inicia con: docker-compose --profile tools up
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  task-network:
+    driver: bridge
