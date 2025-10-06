@@ -31,9 +31,12 @@ app = FastAPI(
 )
 
 # Configure CORS - Usar orígenes específicos desde settings
+cors_origins = settings.cors_origins
+print(f"🔒 CORS Origins configurados: {cors_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,  # Orígenes específicos desde config.py
+    allow_origins=cors_origins,  # Usar property que maneja la lógica
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type", "Accept"],
