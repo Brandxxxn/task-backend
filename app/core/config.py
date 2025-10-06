@@ -16,8 +16,13 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Task Management API"
     DEBUG: bool = True
     
-    # CORS
-    BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:8000"]
+    # CORS - Permitir frontend en Vercel y desarrollo local
+    BACKEND_CORS_ORIGINS: list[str] = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "https://task-front-iota.vercel.app",
+        "https://task-backend-production-f92e.up.railway.app"
+    ]
     
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -2,6 +2,45 @@
 
 API REST para gestión de tareas con autenticación JWT, desarrollada con FastAPI y PostgreSQL (Neon).
 
+---
+
+## 📑 Índice
+
+- [🚀 Características](#-características)
+- [📋 Requisitos Previos](#-requisitos-previos)
+- [🔧 Instalación](#-instalación)
+  - [🐳 Opción 1: Usando Docker (Recomendado)](#-opción-1-usando-docker-recomendado)
+    - [Inicio Rápido con Docker (3 pasos)](#-inicio-rápido-con-docker-3-pasos)
+    - [Comandos Útiles de Docker](#-comandos-útiles-de-docker)
+    - [Configuración con PostgreSQL Local](#-configuración-con-postgresql-local-sin-neon)
+    - [Troubleshooting](#-troubleshooting-problemas-comunes)
+    - [Script Helper Opcional](#-script-helper-opcional-dockersh)
+  - [💻 Opción 2: Instalación Local (Sin Docker)](#-opción-2-instalación-local-sin-docker)
+- [📖 Documentación API](#-documentación-api)
+- [🔑 Endpoints](#-endpoints)
+  - [Autenticación](#autenticación)
+  - [Tareas](#tareas)
+- [🗂️ Estructura del Proyecto](#️-estructura-del-proyecto)
+- [🔒 Seguridad](#-seguridad)
+  - [Autenticación y Autorización](#-autenticación-y-autorización)
+  - [Protección de Datos](#️-protección-de-datos)
+  - [Validación de Datos](#-validación-de-datos)
+  - [Recomendaciones para Producción](#️-recomendaciones-adicionales-para-producción)
+- [🌐 Formato de Respuestas](#-formato-de-respuestas)
+- [🧪 Códigos de Estado HTTP](#-códigos-de-estado-http)
+- [📝 Notas Adicionales](#-notas-adicionales)
+  - [Modelo de Datos de Tareas](#modelo-de-datos-de-tareas)
+  - [Estados de Tareas](#estados-de-tareas)
+  - [Características de Filtrado y Ordenamiento](#características-de-filtrado-y-ordenamiento)
+  - [Importación de Tareas desde CSV](#importación-de-tareas-desde-csv)
+  - [Consideraciones de Producción](#consideraciones-de-producción)
+- [🐳 Deployment con Docker](#-deployment-con-docker)
+- [📁 Archivos de Docker](#-archivos-de-docker)
+- [🤝 Contribución](#-contribución)
+- [📄 Licencia](#-licencia)
+
+---
+
 ## 🚀 Características
 
 - ✅ Registro e inicio de sesión de usuarios
@@ -1379,3 +1418,16 @@ docker push registry.example.com/task-api:latest
 - `.dockerignore` - Archivos ignorados en build
 - `docker.sh` - Script helper para comandos comunes
 
+---
+
+## 🤝 Contribución
+
+Este proyecto es un ejemplo educativo. Siéntete libre de hacer fork y adaptarlo a tus necesidades.
+
+## 📄 Licencia
+
+MIT License
+
+---
+
+**Desarrollado por Kevin Azua usando FastAPI y Neon PostgreSQL**
